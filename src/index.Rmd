@@ -41,5 +41,9 @@ df <- cells_df %>%
 
 df
 
+write_csv(df, '../docs/meps.csv')
 ```
+
+- [CSV](meps.csv)
+
 
