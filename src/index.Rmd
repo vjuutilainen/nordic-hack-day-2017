@@ -12,3 +12,34 @@ library(purrr)
 
 - [Members of the European Parliament (MEPs)](https://data.europa.eu/euodp/en/data/dataset/members-of-the-european-parliament)
 - [Full list of MEPs elected in 2014 [XML]](http://www.europarl.europa.eu/meps/en/xml.html?query=full&filter=all)
+
+Data frame: 
+
+```{r}
+
+r <- GET('http://www.europarl.europa.eu/meps/en/xml.html?query=full&filter=all')
+
+xmldoc <- content(r, 'parse')
+
+# adapted from https://github.com/jennybc/manipulate-xml-with-purrr-dplyr-tidyr
+
+rows <- xmldoc %>% xml_find_all('//mep') %>% map(~ xml_find_all(.x,'./*'))
+rows_df <- data_frame(row = seq_along(rows), nodeset = rows)
+
+cells_df <- rows_df %>%
+  mutate(col_name_raw = nodeset %>% map(~ xml_name(.)),
+         cell_text = nodeset %>% map(~ xml_text(.)),
+         i = nodeset %>% map(~ seq_along(.))) %>%
+  select(row, i, col_name_raw, cell_text) %>%
+  unnest()
+
+df <- cells_df %>% 
+      select(-i) %>% 
+      spread(col_name_raw, cell_text) %>% 
+      select(-row) %>%
+      mutate(id=as.integer(id))
+
+df
+
+```
+
