@@ -6,6 +6,9 @@ library(forcats)
 library(httr)
 library(xml2)
 library(purrr)
+library(leaflet)
+library(sp)
+library(stringr)
 ```
 
 # MEP data
@@ -78,6 +81,26 @@ df_wikidata
 
 ```
 
+# Mapping Wikidata MEPs
+
+```{r}
+
+mapdata <- df_wikidata %>% 
+            mutate(cityCoordinates=str_replace(cityCoordinates,'Point\\(', '')) %>%
+            mutate(cityCoordinates=str_replace(cityCoordinates,'\\)', '')) %>%
+            separate(cityCoordinates, c('longitude', 'latitude'), sep=' ') %>%
+            mutate(latitude=as.numeric(latitude), longitude=as.numeric(longitude))
+
+
+
+
+m <- leaflet(data=mapdata) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(~longitude, ~latitude, label = ~mepLabel)
+
+m  # Print the map
+
+```
 
 
 
