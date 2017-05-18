@@ -85,18 +85,45 @@ df_wikidata
 
 ```{r}
 
-mapdata <- df_wikidata %>% 
+# todo: still duplicates from different coordinates for same place, multiple origin cities... 
+wikidata_add <- df_wikidata %>% select(mepId, mepCityBornLabel, cityCoordinates) %>% unique()
+
+df_joined <- df %>% left_join(wikidata_add, by=c('id'='mepId'))
+
+mapdata <- df_joined %>%
             mutate(cityCoordinates=str_replace(cityCoordinates,'Point\\(', '')) %>%
             mutate(cityCoordinates=str_replace(cityCoordinates,'\\)', '')) %>%
             separate(cityCoordinates, c('longitude', 'latitude'), sep=' ') %>%
-            mutate(latitude=as.numeric(latitude), longitude=as.numeric(longitude))
+            mutate(latitude=as.numeric(latitude), longitude=as.numeric(longitude)) %>%
+            filter(!is.na(latitude), !is.na(longitude))
 
-
-
+pal <- colorFactor(
+        c(
+          'blue',
+          'red',
+          'green',
+          'white',
+          'brown',
+          'pink',
+          'yellow',
+          'cyan',
+          'magenta'
+        ), 
+        domain = 
+        df$politicalGroup %>% unique()
+        )
 
 m <- leaflet(data=mapdata) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(~longitude, ~latitude, label = ~mepLabel)
+  addCircleMarkers(
+    #radius = ~ifelse(type == "ship", 6, 10),
+    color = ~pal(politicalGroup),
+    stroke = FALSE, fillOpacity = 0.5,
+    label = ~paste(politicalGroup, '\n', fullName)
+  )
+
+
+  #addAwesomeMarkers(~longitude, ~latitude, icons = icons, label = ~mepLabel)
 
 m  # Print the map
 
