@@ -10,6 +10,8 @@ library(purrr)
 
 # MEP data
 
+## Official MEP data
+
 - [Members of the European Parliament (MEPs)](https://data.europa.eu/euodp/en/data/dataset/members-of-the-european-parliament)
 - [Full list of MEPs elected in 2014 [XML]](http://www.europarl.europa.eu/meps/en/xml.html?query=full&filter=all)
 
@@ -45,5 +47,37 @@ write_csv(df, '../docs/meps.csv')
 ```
 
 - [CSV](meps.csv)
+
+## MEPs in Wikidata
+
+- [Wikidata Query](http://tinyurl.com/khdg6k3)
+
+```{r}
+
+endpoint <- 'https://query.wikidata.org/sparql'
+
+query <- 
+'
+SELECT ?mep ?mepLabel ?mepId ?mepImage ?mepCityBorn ?mepCityBornLabel ?cityCoordinates
+WHERE
+{
+  ?mep wdt:P1186 ?mepId.
+    OPTIONAL {
+      ?mep wdt:P18 ?mepImage .
+      ?mep wdt:P19 ?mepCityBorn .
+      ?mepCityBorn wdt:P625 ?cityCoordinates . 
+    }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+}
+'
+
+query_r <- GET(endpoint, query = list(query = query), add_headers(Accept = 'text/csv'))
+df_wikidata <- content(query_r, 'parse')
+
+df_wikidata
+
+```
+
+
 
 

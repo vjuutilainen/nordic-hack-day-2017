@@ -121,6 +121,8 @@ $(document).ready(function () {
 
 <div id="mep-data" class="section level1">
 <h1>MEP data</h1>
+<div id="official-mep-data" class="section level2">
+<h2>Official MEP data</h2>
 <ul>
 <li><a href="https://data.europa.eu/euodp/en/data/dataset/members-of-the-european-parliament">Members of the European Parliament (MEPs)</a></li>
 <li><a href="http://www.europarl.europa.eu/meps/en/xml.html?query=full&amp;filter=all">Full list of MEPs elected in 2014 [XML]</a></li>
@@ -144,6 +146,28 @@ $(document).ready(function () {
 <ul>
 <li><a href="meps.csv">CSV</a></li>
 </ul>
+</div>
+<div id="meps-in-wikidata" class="section level2">
+<h2>MEPs in Wikidata</h2>
+<ul>
+<li><a href="http://tinyurl.com/khdg6k3">Wikidata Query</a></li>
+</ul>
+<pre><code>## # A tibble: 3,717 × 7
+##                                      mep             mepLabel mepId
+##                                    &lt;chr&gt;                &lt;chr&gt; &lt;int&gt;
+## 1  http://www.wikidata.org/entity/Q67177    Jakob von Uexkull  1499
+## 2  http://www.wikidata.org/entity/Q67919          Heide Rühle  4294
+## 3  http://www.wikidata.org/entity/Q68016         Helga Trüpel 28240
+## 4  http://www.wikidata.org/entity/Q68020       Hiltrud Breyer  1059
+## 5  http://www.wikidata.org/entity/Q68020       Hiltrud Breyer  1059
+## 6  http://www.wikidata.org/entity/Q68044          Reimer Böge  1037
+## 7  http://www.wikidata.org/entity/Q68050  Giampiero Boniperti  2034
+## 8  http://www.wikidata.org/entity/Q68431        Bernd Posselt  2229
+## 9  http://www.wikidata.org/entity/Q69659 Elisabeth Schroedter  1933
+## 10 http://www.wikidata.org/entity/Q69674       Michael Cramer 28238
+## # ... with 3,707 more rows, and 4 more variables: mepImage &lt;chr&gt;,
+## #   mepCityBorn &lt;chr&gt;, mepCityBornLabel &lt;chr&gt;, cityCoordinates &lt;chr&gt;</code></pre>
+</div>
 </div>
 
 
