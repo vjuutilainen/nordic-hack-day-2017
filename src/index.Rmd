@@ -129,7 +129,21 @@ SELECT ?EPgroup ?EPgroupLabel ?polideology ?polideologyLabel WHERE {
 query_r <- GET(endpoint, query = list(query = query), add_headers(Accept = 'text/csv'))
 df_ideologies <- content(query_r, 'parse')
 
-df_ideologies
+shorten_group_name <- function(str) {
+  if      (str_detect(str, "Socialists"))      { return("S&D") }
+  else if (str_detect(str, "People"))          { return("EPP") }
+  else if (str_detect(str, "Greens"))          { return("GREENS/EFA") }
+  else if (str_detect(str, "Nordic"))          { return("GUE/NGL") }
+  else if (str_detect(str, "Liberals"))        { return("ALDE") }
+  else if (str_detect(str, "Direct"))          { return("EFDD") }
+  else if (str_detect(str, "Conservatives"))   { return("ECR") }
+  else if (str_detect(str, "Nations"))         { return("EFD") }
+  else if (str_detect(str, "Non-attached"))    { return("NI") }
+  else { return(NA)} 
+}
+
+df_ideologies_shorted <- df_ideologies %>% rowwise() %>% mutate(short = shorten_group_name(EPgroupLabel))
+
 
 ```
 
