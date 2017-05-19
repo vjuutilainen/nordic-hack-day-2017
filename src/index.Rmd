@@ -153,11 +153,10 @@ shorten_group_name <- function(str) {
 df_ideologies_shorted <- df_ideologies %>% 
   rowwise() %>% mutate(short = shorten_group_name(EPgroupLabel))
 
-df_ideologies_shorted %>% select(politicalGroup, short) %>% unique()
-
-
 df_meps_official_shorted <- df_meps_official %>% 
   rowwise() %>% mutate(short = shorten_group_name(politicalGroup))
+
+df_ideologies_shorted %>% select(short) %>% unique()
 
 
 ```
