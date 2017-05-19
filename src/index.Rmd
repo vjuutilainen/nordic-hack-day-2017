@@ -64,8 +64,8 @@ write_csv(df_meps_official, '../docs/meps.csv')
 ### What countries?
 
 ```{r}
-ggplot(data= df_meps_official) +
-  geom_bar(aes(x=country, fill=country)) +
+ggplot(data= df_meps_official %>% group_by(country) %>% mutate(count=n())) +
+  geom_bar(aes(x=fct_reorder(country, count), fill=country)) +
   coord_flip() +
   theme(legend.position = 'bottom')
 ```
@@ -73,8 +73,8 @@ ggplot(data= df_meps_official) +
 ### What political groups?
 
 ```{r}
-ggplot(data= df_meps_official) +
-  geom_bar(aes(x=politicalGroup, fill=politicalGroup)) +
+ggplot(data= df_meps_official %>% group_by(politicalGroup) %>% mutate(count=n())) +
+  geom_bar(aes(x=fct_reorder(politicalGroup, count), fill=politicalGroup)) +
   coord_flip() +
   theme(legend.position = 'bottom')
 ```
@@ -160,8 +160,8 @@ df_ideologies_shorted %>% select(short) %>% unique()
 
 ids <- df_meps_official_shorted %>% left_join(df_ideologies_shorted, by='short')
 
-ggplot(data= ids) +
-  geom_bar(aes(x=polideologyLabel, fill=polideologyLabel)) +
+ggplot(data= ids %>% group_by(polideologyLabel) %>% filter(!is.na(polideologyLabel)) %>% mutate(count=n())) +
+  geom_bar(aes(x=fct_reorder(polideologyLabel, count), fill=polideologyLabel)) +
   coord_flip() +
   theme(legend.position = 'bottom')
 
