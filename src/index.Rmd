@@ -133,12 +133,6 @@ df_ideologies
 
 ```
 
-### Working with abbreviations
-
-```{r}
-
-
-```
 
 ## Mapping Wikidata MEPs
 
@@ -160,15 +154,14 @@ mapdata <- df_joined %>%
 
 pal <- colorFactor(
         c(
-          'blue',
-          'red',
+          'lightBlue',
+          'DarkViolet',
           'green',
-          'white',
+          'red',
+          'orange',
+          'DeepPink',
           'brown',
-          'pink',
-          'yellow',
-          'cyan',
-          'magenta'
+          'grey'
         ), 
         domain = 
         df_meps_official$politicalGroup %>% unique()
@@ -179,7 +172,7 @@ m <- leaflet(data=mapdata) %>%
   addCircleMarkers(
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.5,
-    label = ~paste(politicalGroup, '\n', fullName)
+    label = ~fullName
   )
 
 
