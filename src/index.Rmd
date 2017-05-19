@@ -209,8 +209,14 @@ m
 
 ### Group of the European People's Party (Christian Democrats)
 
+
+
+
 ```{r}
-m <- leaflet(data=mapdata %>% filter(politicalGroup=='Group of the European People\'s Party (Christian Democrats)')) %>%
+
+mapdataFiltered <- mapdata %>% filter(politicalGroup=='Group of the European People\'s Party (Christian Democrats)')
+
+m1 <- leaflet(data=mapdataFiltered) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
     radius = 5,
@@ -219,15 +225,16 @@ m <- leaflet(data=mapdata %>% filter(politicalGroup=='Group of the European Peop
     label = ~fullName
   )
 
-m 
+m1
 ```
-
-
 
 ### Europe of Nations and Freedom Group
 
 ```{r}
-m <- leaflet(data=mapdata %>% filter(politicalGroup=='Europe of Nations and Freedom Group')) %>%
+
+mapdataFiltered2 <- mapdata %>% filter(politicalGroup=='Europe of Nations and Freedom Group')
+
+m2 <- leaflet(data=mapdataFiltered2) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
     radius = 5,
@@ -236,7 +243,7 @@ m <- leaflet(data=mapdata %>% filter(politicalGroup=='Europe of Nations and Free
     label = ~fullName
   )
 
-m 
+m2
 ```
 
 
