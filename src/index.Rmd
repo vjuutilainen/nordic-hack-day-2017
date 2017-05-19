@@ -133,7 +133,7 @@ df_ideologies
 
 ```
 
-### Working with abbreviations
+### Working with abbreviations and ideologies
 
 ```{r}
 
@@ -212,6 +212,9 @@ pal <- colorFactor(
 - Total
 - Group of the European People's Party (Christian Democrats)
 - Europe of Nations and Freedom Group
+- Euroskeptics
+- Left-wing
+
 
 ```{r}
 
