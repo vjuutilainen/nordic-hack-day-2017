@@ -129,6 +129,14 @@ SELECT ?EPgroup ?EPgroupLabel ?polideology ?polideologyLabel WHERE {
 query_r <- GET(endpoint, query = list(query = query), add_headers(Accept = 'text/csv'))
 df_ideologies <- content(query_r, 'parse')
 
+df_ideologies
+
+```
+
+### Working with abbreviations
+
+```{r}
+
 shorten_group_name <- function(str) {
   if      (str_detect(str, "Socialists"))      { return("S&D") }
   else if (str_detect(str, "People"))          { return("EPP") }
@@ -144,6 +152,7 @@ shorten_group_name <- function(str) {
 
 df_ideologies_shorted <- df_ideologies %>% rowwise() %>% mutate(short = shorten_group_name(EPgroupLabel))
 
+df_ideologies_shorted
 
 ```
 
