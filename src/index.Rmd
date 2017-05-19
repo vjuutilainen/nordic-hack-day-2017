@@ -192,10 +192,17 @@ pal <- colorFactor(
 
 ```
 
-### All MEPs with origin city
+### MEP maps
+
+- Total
+- Group of the European People's Party (Christian Democrats)
+- Europe of Nations and Freedom Group
 
 ```{r}
-m <- leaflet(data=mapdata) %>%
+
+mapdataAll <- mapdata
+
+m <- leaflet(data=mapdataAll) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
     radius = 5,
@@ -205,14 +212,6 @@ m <- leaflet(data=mapdata) %>%
   )
 
 m 
-```
-
-### Group of the European People's Party (Christian Democrats)
-
-
-
-
-```{r}
 
 mapdataFiltered <- mapdata %>% filter(politicalGroup=='Group of the European People\'s Party (Christian Democrats)')
 
@@ -226,11 +225,6 @@ m1 <- leaflet(data=mapdataFiltered) %>%
   )
 
 m1
-```
-
-### Europe of Nations and Freedom Group
-
-```{r}
 
 mapdataFiltered2 <- mapdata %>% filter(politicalGroup=='Europe of Nations and Freedom Group')
 
@@ -244,6 +238,5 @@ m2 <- leaflet(data=mapdataFiltered2) %>%
   )
 
 m2
+
 ```
-
-
