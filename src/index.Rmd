@@ -158,8 +158,18 @@ df_meps_official_shorted <- df_meps_official %>%
 
 df_ideologies_shorted %>% select(short) %>% unique()
 
+ids <- df_meps_official_shorted %>% left_join(df_ideologies_shorted, by='short')
+
+ggplot(data= ids) +
+  geom_bar(aes(x=polideologyLabel, fill=polideologyLabel)) +
+  coord_flip() +
+  theme(legend.position = 'bottom')
 
 ```
+
+
+
+
 
 
 ## Mapping Wikidata MEPs
