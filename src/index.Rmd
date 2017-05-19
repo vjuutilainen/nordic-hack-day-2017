@@ -175,9 +175,10 @@ pal <- colorFactor(
 m <- leaflet(data=mapdata) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
+    radius = 5,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
-    label = ~fullName
+    label = ~politicalGroup
   )
 
 m 
@@ -189,6 +190,7 @@ m
 m <- leaflet(data=mapdata %>% filter(politicalGroup=='Group of the European People\'s Party (Christian Democrats)')) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
+    radius = 5,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
@@ -203,6 +205,7 @@ m
 m <- leaflet(data=mapdata %>% filter(politicalGroup=='Confederal Group of the European United Left - Nordic Green Left')) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
+    radius = 5,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
@@ -217,7 +220,7 @@ m
 m <- leaflet(data=mapdata %>% filter(politicalGroup=='Europe of Nations and Freedom Group')) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
-    radius = 2,
+    radius = 5,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
