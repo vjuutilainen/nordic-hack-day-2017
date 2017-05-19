@@ -167,18 +167,63 @@ pal <- colorFactor(
         df_meps_official$politicalGroup %>% unique()
         )
 
+```
+
+### All MEPs with origin city
+
+```{r}
 m <- leaflet(data=mapdata) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
     color = ~pal(politicalGroup),
-    stroke = FALSE, fillOpacity = 0.5,
+    stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
   )
 
-
-m  # Print the map
-
+m 
 ```
 
+### Group of the European People's Party (Christian Democrats)
+
+```{r}
+m <- leaflet(data=mapdata %>% filter(politicalGroup=='Group of the European People\'s Party (Christian Democrats)')) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(
+    color = ~pal(politicalGroup),
+    stroke = FALSE, fillOpacity = 0.8,
+    label = ~fullName
+  )
+
+m 
+```
+
+### Confederal Group of the European United Left - Nordic Green Left
+
+```{r}
+m <- leaflet(data=mapdata %>% filter(politicalGroup=='Confederal Group of the European United Left - Nordic Green Left')) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(
+    color = ~pal(politicalGroup),
+    stroke = FALSE, fillOpacity = 0.8,
+    label = ~fullName
+  )
+
+m 
+```
+
+### Europe of Nations and Freedom Group
+
+```{r}
+m <- leaflet(data=mapdata %>% filter(politicalGroup=='Europe of Nations and Freedom Group')) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(
+    radius = 2,
+    color = ~pal(politicalGroup),
+    stroke = FALSE, fillOpacity = 0.8,
+    label = ~fullName
+  )
+
+m 
+```
 
 
