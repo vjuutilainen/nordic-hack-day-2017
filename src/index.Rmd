@@ -212,7 +212,7 @@ pal <- colorFactor(
 - Total
 - Group of the European People's Party (Christian Democrats)
 - Europe of Nations and Freedom Group
-- Europe of Freedom and Direct Democracy Group
+- European Conservatives and Reformists Group
 - Euroskeptics
 - Left-wing
 
@@ -258,7 +258,7 @@ m2 <- leaflet(data=mapdataFiltered2) %>%
 
 m2
 
-mapdataFiltered3 <- mapdata %>% filter(politicalGroup=='Europe of Freedom and Direct Democracy Group')
+mapdataFiltered3 <- mapdata %>% filter(politicalGroup=='European Conservatives and Reformists Group')
 
 m3 <- leaflet(data=mapdataFiltered3) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
