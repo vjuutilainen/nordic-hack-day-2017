@@ -47,15 +47,15 @@ cells_df <- rows_df %>%
   select(row, i, col_name_raw, cell_text) %>%
   unnest()
 
-df <- cells_df %>% 
-      select(-i) %>% 
-      spread(col_name_raw, cell_text) %>% 
-      select(-row) %>%
-      mutate(id=as.integer(id))
+df_meps_official <- cells_df %>% 
+                    select(-i) %>% 
+                    spread(col_name_raw, cell_text) %>% 
+                    select(-row) %>%
+                    mutate(id=as.integer(id))
 
-df
+df_meps_official
 
-write_csv(df, '../docs/meps.csv')
+write_csv(df_meps_official, '../docs/meps.csv')
 
 ```
 
@@ -64,7 +64,7 @@ write_csv(df, '../docs/meps.csv')
 ### What countries?
 
 ```{r}
-ggplot(data= df) +
+ggplot(data= df_meps_official) +
   geom_bar(aes(x=country, fill=country)) +
   coord_flip() +
   theme(legend.position = 'bottom')
@@ -73,7 +73,7 @@ ggplot(data= df) +
 ### What political groups?
 
 ```{r}
-ggplot(data= df) +
+ggplot(data= df_meps_official) +
   geom_bar(aes(x=politicalGroup, fill=politicalGroup)) +
   coord_flip() +
   theme(legend.position = 'bottom')
@@ -81,21 +81,9 @@ ggplot(data= df) +
 
 ## MEPs in Wikidata
 
-- [Wikidata Query: Get items with MEP id, with some custom properties](http://tinyurl.com/khdg6k3)
+### MEP images, cities and coordinates
 
-```
-SELECT ?mep ?mepLabel ?mepId ?mepImage ?mepCityBorn ?mepCityBornLabel ?cityCoordinates
-WHERE
-{
-  ?mep wdt:P1186 ?mepId.
-    OPTIONAL {
-      ?mep wdt:P18 ?mepImage .
-      ?mep wdt:P19 ?mepCityBorn .
-      ?mepCityBorn wdt:P625 ?cityCoordinates . 
-    }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
-}
-```
+- [Wikidata Query](http://tinyurl.com/khdg6k3)
 
 ```{r}
 
@@ -123,7 +111,36 @@ df_wikidata
 
 ```
 
-# Mapping Wikidata MEPs
+### We supplemented ideologies of political groups in Wikidata
+
+- [Wikidata Query](http://tinyurl.com/kz3rwwr)
+
+```{r}
+
+query <-
+'
+SELECT ?EPgroup ?EPgroupLabel ?polideology ?polideologyLabel WHERE {
+  ?EPgroup wdt:P31 wd:Q25796237 . 
+  ?EPgroup wdt:P1142 ?polideology . 
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+'
+
+query_r <- GET(endpoint, query = list(query = query), add_headers(Accept = 'text/csv'))
+df_ideologies <- content(query_r, 'parse')
+
+df_ideologies
+
+```
+
+### Working with abbreviations
+
+```{r}
+
+
+```
+
+## Mapping Wikidata MEPs
 
 ```{r}
 
@@ -131,7 +148,7 @@ df_wikidata
 wikidata_add <- df_wikidata %>% select(mepId, mepCityBornLabel, cityCoordinates) %>% unique()
 
 # still contains duplicates because of different coordinates for the same place and multiple origin cities
-df_joined <- df %>% left_join(wikidata_add, by=c('id'='mepId'))
+df_joined <- df_meps_official %>% left_join(wikidata_add, by=c('id'='mepId'))
 
 # make mapdata with regex
 mapdata <- df_joined %>%
@@ -154,7 +171,7 @@ pal <- colorFactor(
           'magenta'
         ), 
         domain = 
-        df$politicalGroup %>% unique()
+        df_meps_official$politicalGroup %>% unique()
         )
 
 m <- leaflet(data=mapdata) %>%
