@@ -254,4 +254,47 @@ m2 <- leaflet(data=mapdataFiltered2) %>%
 
 m2
 
+
+
+
+
+
+
+
+
+# still contains duplicates because of different coordinates for the same place and multiple origin cities
+df_joined <- ids %>% left_join(wikidata_add, by=c('id'='mepId'))
+
+# make mapdata with regex
+mapdataId <- df_joined %>%
+            mutate(cityCoordinates=str_replace(cityCoordinates,'Point\\(', '')) %>%
+            mutate(cityCoordinates=str_replace(cityCoordinates,'\\)', '')) %>%
+            separate(cityCoordinates, c('longitude', 'latitude'), sep=' ') %>%
+            mutate(latitude=as.numeric(latitude), longitude=as.numeric(longitude)) %>%
+            filter(!is.na(latitude), !is.na(longitude))
+
+mSkep <- leaflet(data=mapdataId %>% filter(polideologyLabel=='euroscepticism')) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(
+    radius = 5,
+    color='black',
+    stroke = FALSE, fillOpacity = 0.8,
+    label = ~polideologyLabel
+  )
+
+mSkep
+
+mLeft <- leaflet(data=mapdataId %>% filter(polideologyLabel=='left-wing')) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(
+    radius = 5,
+    color='red',
+    stroke = FALSE, fillOpacity = 0.8,
+    label = ~polideologyLabel
+  )
+
+mLeft
+
+
+
 ```
