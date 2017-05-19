@@ -152,7 +152,7 @@ shorten_group_name <- function(str) {
 
 df_ideologies_shorted <- df_ideologies %>% rowwise() %>% mutate(short = shorten_group_name(EPgroupLabel))
 
-df_ideologies_shorted
+df_ideologies_shorted %>% select(politicalGroup, short) %>% unique()
 
 ```
 
@@ -218,7 +218,7 @@ mapdataFiltered <- mapdata %>% filter(politicalGroup=='Group of the European Peo
 m1 <- leaflet(data=mapdataFiltered) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
-    radius = 5,
+    radius = 8,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
@@ -231,7 +231,7 @@ mapdataFiltered2 <- mapdata %>% filter(politicalGroup=='Europe of Nations and Fr
 m2 <- leaflet(data=mapdataFiltered2) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
-    radius = 5,
+    radius = 8,
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.8,
     label = ~fullName
