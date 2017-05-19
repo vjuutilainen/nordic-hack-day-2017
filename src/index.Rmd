@@ -15,11 +15,12 @@ library(stringr)
 
 ![](monkeys.jpg)
 
-*Smoking monkeys by David Teniers the Younger (1650)* 
+*Smoking monkeys by David Teniers the Younger (1650)*
 
-## Wikidata in short
+## Wikidata 
 
 - [Making creative queries](http://tinyurl.com/mhecm35)
+- [Why Are There So Many 17th Century Paintings of Monkeys Getting Drunk?](https://resobscura.blogspot.dk/2017/05/why-are-there-so-many-17th-century.html)
 
 ## Getting official MEP data
 
@@ -82,6 +83,20 @@ ggplot(data= df) +
 
 - [Wikidata Query: Get items with MEP id, with some custom properties](http://tinyurl.com/khdg6k3)
 
+```
+SELECT ?mep ?mepLabel ?mepId ?mepImage ?mepCityBorn ?mepCityBornLabel ?cityCoordinates
+WHERE
+{
+  ?mep wdt:P1186 ?mepId.
+    OPTIONAL {
+      ?mep wdt:P18 ?mepImage .
+      ?mep wdt:P19 ?mepCityBorn .
+      ?mepCityBorn wdt:P625 ?cityCoordinates . 
+    }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+}
+```
+
 ```{r}
 
 endpoint <- 'https://query.wikidata.org/sparql'
@@ -112,11 +127,13 @@ df_wikidata
 
 ```{r}
 
-# todo: still duplicates from different coordinates for same place, multiple origin cities... 
+# drop duplicates caused by multiple images
 wikidata_add <- df_wikidata %>% select(mepId, mepCityBornLabel, cityCoordinates) %>% unique()
 
+# still contains duplicates because of different coordinates for the same place and multiple origin cities
 df_joined <- df %>% left_join(wikidata_add, by=c('id'='mepId'))
 
+# make mapdata with regex
 mapdata <- df_joined %>%
             mutate(cityCoordinates=str_replace(cityCoordinates,'Point\\(', '')) %>%
             mutate(cityCoordinates=str_replace(cityCoordinates,'\\)', '')) %>%
@@ -143,15 +160,11 @@ pal <- colorFactor(
 m <- leaflet(data=mapdata) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(
-    #radius = ~ifelse(type == "ship", 6, 10),
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.5,
-    label = ~paste(politicalGroup, '\n', fullName),
-    clusterOptions = markerClusterOptions()
+    label = ~paste(politicalGroup, '\n', fullName)
   )
 
-
-  #addAwesomeMarkers(~longitude, ~latitude, icons = icons, label = ~mepLabel)
 
 m  # Print the map
 
