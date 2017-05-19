@@ -11,9 +11,17 @@ library(sp)
 library(stringr)
 ```
 
-# MEP data
+# Making EU election data great again
 
-## Official MEP data
+![](monkeys.jpg)
+
+*Smoking monkeys by David Teniers the Younger (1650)* 
+
+## Wikidata in short
+
+- [Making creative queries](http://tinyurl.com/mhecm35)
+
+## Getting official MEP data
 
 - [Members of the European Parliament (MEPs)](https://data.europa.eu/euodp/en/data/dataset/members-of-the-european-parliament)
 - [Full list of MEPs elected in 2014 [XML]](http://www.europarl.europa.eu/meps/en/xml.html?query=full&filter=all)
@@ -47,13 +55,32 @@ df <- cells_df %>%
 df
 
 write_csv(df, '../docs/meps.csv')
+
 ```
 
-- [CSV](meps.csv)
+- [Just built this CSV](meps.csv)
+
+### What countries?
+
+```{r}
+ggplot(data= df) +
+  geom_bar(aes(x=country, fill=country)) +
+  coord_flip() +
+  theme(legend.position = 'bottom')
+```
+
+### What political groups?
+
+```{r}
+ggplot(data= df) +
+  geom_bar(aes(x=politicalGroup, fill=politicalGroup)) +
+  coord_flip() +
+  theme(legend.position = 'bottom')
+```
 
 ## MEPs in Wikidata
 
-- [Wikidata Query](http://tinyurl.com/khdg6k3)
+- [Wikidata Query: Get items with MEP id, with some custom properties](http://tinyurl.com/khdg6k3)
 
 ```{r}
 
@@ -119,7 +146,8 @@ m <- leaflet(data=mapdata) %>%
     #radius = ~ifelse(type == "ship", 6, 10),
     color = ~pal(politicalGroup),
     stroke = FALSE, fillOpacity = 0.5,
-    label = ~paste(politicalGroup, '\n', fullName)
+    label = ~paste(politicalGroup, '\n', fullName),
+    clusterOptions = markerClusterOptions()
   )
 
 
